@@ -1,6 +1,6 @@
 namespace Pccg
 {
-    internal enum Subcommand
+    internal enum Command
     {
         Compendium,
         Draw

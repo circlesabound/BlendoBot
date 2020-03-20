@@ -1,11 +1,11 @@
-﻿using System;
-using System.Text.Json;
-using System.Threading.Tasks;
-using BlendoBotLib;
-using DSharpPlus.EventArgs;
-
-namespace Pccg
+﻿namespace Pccg
 {
+    using System;
+    using System.Threading.Tasks;
+    using BlendoBotLib;
+    using DSharpPlus.EventArgs;
+    using Pccg.Commands;
+
     public class PccgCommand : CommandBase, IDisposable
     {
         public PccgCommand(ulong guildId, IBotMethods botMethods) : base(guildId, botMethods) { }
@@ -13,7 +13,7 @@ namespace Pccg
         public override string Term => "?pccg";
         public override string Name => "pccg";
         public override string Description => "Predatory Collectable Character Game";
-        public override string Usage => "TODO";
+        public override string Usage => $"Usage: {"?pccg <command> <arguments>".Code()}";
         public override string Author => "mozzarella";
         public override string Version => $"Client=0.0.1; Server={this.client.GetServerVersion().Result.ValueOrDefault.CommitHash ?? "<error>"}";
 
@@ -41,24 +41,31 @@ namespace Pccg
             }
 
             var subcommandStr = splitInput[1];
-            if (!Enum.TryParse<Subcommand>(subcommandStr, true, out var subcommand))
+            if (!Enum.TryParse<Command>(subcommandStr, true, out var subcommand))
             {
                 await BotMethods.SendMessage(this, new SendMessageEventArgs
                     {
-                        Message = $"Invalid subcommand for {this.Term.Code()}",
+                        Message = $"Invalid command for {this.Term.Code()}",
                         Channel = e.Channel,
-                        LogMessage = "PccgBadSubcommand"
+                        LogMessage = "PccgBadCommand"
                     }).ConfigureAwait(false);
                 return;
             }
 
             switch (subcommand)
             {
-                case Subcommand.Compendium:
-                    await CompendiumCommand(e);
+                case Command.Compendium:
+                    await new CompendiumCommand().Run(
+                        this.client,
+                        e,
+                        msg => BotMethods.SendMessage(this, msg));
                     break;
-                case Subcommand.Draw:
-                    await DrawCommand(e);
+                case Command.Draw:
+                    await new DrawCommand().Run(
+                        this.client,
+                        e,
+                        msg => BotMethods.SendMessage(this, msg),
+                        msg => BotMethods.SendFile(this, msg));
                     break;
                 default:
                     break;
@@ -70,38 +77,6 @@ namespace Pccg
             {
                 ApiHost = new Uri(BotMethods.ReadConfig(this, this.Name, "ApiUri"))
             };
-        
-        private async Task DrawCommand(MessageCreateEventArgs e)
-        {
-            var result = await this.client.GetRandomCardFromCompendium().ConfigureAwait(false);
-            if (result.IsFailed)
-            {
-                var errorMessage = string.Join(' ', result.Reasons);
-                await BotMethods.SendMessage(this, new SendMessageEventArgs
-                    {
-                        Message = $"Error processing {Subcommand.Draw}: {errorMessage}",
-                        Channel = e.Channel,
-                        LogMessage = $"PccgDraw : Error{Environment.NewLine}{errorMessage}"
-                    }).ConfigureAwait(false);
-            }
-            else
-            {
-                await BotMethods.SendMessage(this, new SendMessageEventArgs
-                    {
-                        Message = $"{JsonSerializer.Serialize(result.Value).Code()}",
-                        Channel = e.Channel,
-                        LogMessage = "PccgDraw : Success"
-                    }).ConfigureAwait(false);
-            }
-        }
-
-        private async Task CompendiumCommand(MessageCreateEventArgs e)
-        {
-            // Parse args
-            var splitInput = e.Message.Content.Trim().Split(' ', 3, StringSplitOptions.RemoveEmptyEntries);
-            // TODO
-            throw new NotImplementedException();
-        }
 
         public void Dispose()
         {
