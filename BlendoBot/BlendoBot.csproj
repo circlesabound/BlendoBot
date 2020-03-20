@@ -23,6 +23,7 @@
     <ProjectReference Include="..\Modules\DecimalSpiral\DecimalSpiral.csproj" />
     <ProjectReference Include="..\Modules\MrPing\MrPing.csproj" />
     <ProjectReference Include="..\Modules\OverwatchLeague\OverwatchLeague.csproj" />
+    <ProjectReference Include="..\Modules\Pccg\Pccg.csproj" />
     <ProjectReference Include="..\Modules\RegionalIndicator\RegionalIndicator.csproj" />
     <ProjectReference Include="..\Modules\RemindMe\RemindMe.csproj" />
     <ProjectReference Include="..\Modules\Roll\Roll.csproj" />

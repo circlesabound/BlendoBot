@@ -37,6 +37,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DecimalSpiral", "Modules\De
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WheelOfFortune", "Modules\WheelOfFortune\WheelOfFortune.csproj", "{252AC46B-F654-4913-A062-BE54A9FC8060}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pccg", "Modules\Pccg\Pccg.csproj", "{17B9A5A1-39D6-4884-90F6-F17EF48BAA67}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -95,6 +97,10 @@ Global
 		{252AC46B-F654-4913-A062-BE54A9FC8060}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{252AC46B-F654-4913-A062-BE54A9FC8060}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{252AC46B-F654-4913-A062-BE54A9FC8060}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17B9A5A1-39D6-4884-90F6-F17EF48BAA67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17B9A5A1-39D6-4884-90F6-F17EF48BAA67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17B9A5A1-39D6-4884-90F6-F17EF48BAA67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17B9A5A1-39D6-4884-90F6-F17EF48BAA67}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -111,6 +117,7 @@ Global
 		{03E964B7-1589-4459-9002-2D40D52CC703} = {3CCE0CD2-5174-42BB-B88C-F7F3AA098167}
 		{1D7D2F92-FC9D-4E0F-9868-1379515756BF} = {3CCE0CD2-5174-42BB-B88C-F7F3AA098167}
 		{252AC46B-F654-4913-A062-BE54A9FC8060} = {3CCE0CD2-5174-42BB-B88C-F7F3AA098167}
+		{17B9A5A1-39D6-4884-90F6-F17EF48BAA67} = {3CCE0CD2-5174-42BB-B88C-F7F3AA098167}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DEBA3ECA-7BB0-4C6A-8053-483E8EBE6FD2}
