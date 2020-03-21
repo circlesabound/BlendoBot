@@ -11,6 +11,6 @@ namespace Pccg
 
         Task<Result<Card>> GetRandomCardFromCompendium();
 
-        Task<Result<Card>> AddCardToCompendium(Card cardToAdd);
+        Task<Result> UpsertCardToCompendium(Card cardToAdd);
     }
 }

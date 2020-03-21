@@ -1,6 +1,7 @@
 namespace Pccg
 {
     using System;
+    using System.Net;
     using System.Net.Http;
     using System.Text.Json;
     using System.Threading;
@@ -32,7 +33,7 @@ namespace Pccg
                     .Handle<HttpRequestException>()
                     .RetryAsync(3)
                     .ExecuteAsync(async ct => await this.httpClient.GetAsync(
-                        new Uri(this.apiHost, @"rnd"),
+                        new Uri(this.apiHost, @"compendium/random"),
                         ct).ConfigureAwait(false),
                     CancellationToken.None).ConfigureAwait(false);
                 var contentStr = await ret.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -47,17 +48,31 @@ namespace Pccg
             }
         }
 
-        public async Task<Result<Card>> AddCardToCompendium(Card cardToAdd)
+        public async Task<Result> UpsertCardToCompendium(Card card)
         {
             try
             {
-                var ret = await this.httpClient.PutAsync(
-                    new Uri(this.apiHost, @"compendium"),
-                    new StringContent(JsonSerializer.Serialize(cardToAdd))
-                ).ConfigureAwait(false);
-                var contentStr = await ret.Content.ReadAsStringAsync().ConfigureAwait(false);
-                var card = JsonSerializer.Deserialize<Card>(contentStr);
-                return Results.Ok(card);
+                var ret = await Policy
+                    .Handle<HttpRequestException>()
+                    .RetryAsync(3)
+                    .ExecuteAsync(async ct => await this.httpClient.PutAsync(
+                        new Uri(this.apiHost, $"compendium/{card.Id}"),
+                        new StringContent(JsonSerializer.Serialize(card)),
+                        ct).ConfigureAwait(false),
+                    CancellationToken.None).ConfigureAwait(false);
+                ret.EnsureSuccessStatusCode();
+                switch (ret.StatusCode)
+                {
+                    case HttpStatusCode.Created:
+                        // Inserted
+                    case HttpStatusCode.OK:
+                        // Updated
+                        return Results.Ok();
+                    default:
+                        return Results.Fail(
+                            new Error($"PUT returned {ret.StatusCode}")
+                        );
+                }
             }
             catch (Exception ex)
             {
